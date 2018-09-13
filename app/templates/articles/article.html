@@ -1,0 +1,43 @@
+{% extends "includes/layout.html" %}
+{% block title %}
+{{article.title}}
+{% endblock title %}
+
+{% block body %}
+{% if article %}
+<div class="text-center">
+<h2 class="display-4">{{article.title}} </h2>
+<p class="text-muted">
+    <i class="fas fa-user-astronaut"></i> 
+    {% if article.author_username == 'Deleted User' %}
+    {{article.author_username}}
+    {% else %}
+    <a href="/profile/{{article.author}}">{{article.author_username}}</a>
+    {% endif %}
+      | 
+    <i class="fas fa-calendar-alt"></i> {{article.created_at}} | 
+    <i class="fas fa-eye"></i> {{article.readtime}}</p>
+</div>
+<hr>
+<div class="text-justify">
+{{article.content|safe}}
+</div>
+<hr>
+{% if session.logged_in %}
+
+{% if 'delete_article' in permissions or article.author == session.user.username %}
+<a href="/delete/{{article.id}}" class="btn btn-danger">Sil</a>
+{% endif %}
+{% if 'edit_article' in permissions or article.author == session.user.username %}
+<a href="/edit/{{article.id}}" class="btn btn-primary">Dəyiş</a>
+{% endif %}
+<hr>
+{% endif %}
+
+{% else %}
+<div class="alert alert-warning">
+    Belə Məqalə Tapılmadı
+</div>
+{% endif %}
+
+{% endblock body %}

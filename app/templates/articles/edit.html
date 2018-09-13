@@ -1,0 +1,29 @@
+{% extends "includes/layout.html" %}
+{% block title %}
+Dəyiş: {{article.title}}
+{% endblock title %}
+{% block kod %}
+<script src="/static/ckeditor/ckeditor.js"></script>
+{% endblock kod %}
+
+{% block body %}
+{% from "includes/formhelper.html" import render_field %}
+<h3 class="display-4">
+    Məqalə Dəyiş
+</h3>
+<hr>
+<form method='post'>
+    {{ render_field(form.title,class = 'form-control') }}
+    {{ render_field(form.content,class = 'form-control', rows='10') }}
+    {{ render_field(form.category,class = 'form-control') }}
+    
+    <input type="submit" class="btn btn-success" value="Dəyiş">
+</form>
+<hr>
+<script>
+    
+    CKEDITOR.replace( 'content',{
+        language: 'az'
+    } );
+</script>
+{% endblock body %}

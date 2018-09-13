@@ -1,0 +1,30 @@
+{% extends "includes/layout.html" %}
+{% block title %}
+Məqalə yarat
+{% endblock title %}
+{% block kod %}
+<script src="/static/ckeditor/ckeditor.js"></script>
+{% endblock kod %}
+
+{% block body %}
+{% from "includes/formhelper.html" import render_field %}
+<h3 class="display-4">
+    Məqalə Yarat
+</h3>
+<hr>
+<form method='post'>
+    {{ render_field(form.title,class = 'form-control') }}
+    {{ render_field(form.content,class = 'form-control', rows='10') }}
+    {{ render_field(form.category,class = 'form-control') }}
+    
+    <input type="submit" class="btn btn-success" value="Yarat">
+</form>
+<hr>
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace( 'content',{
+        language: 'az'
+    } );
+</script>
+{% endblock body %}

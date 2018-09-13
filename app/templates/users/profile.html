@@ -1,0 +1,46 @@
+{% extends "includes/layout.html" %}
+{% block title %}
+Profil: {{user.username}}
+{% endblock title %}
+
+{% block body %}
+<h3 class="display-4">
+    <i class="fas fa-user-astronaut"></i> {{user.username}}
+</h3>
+<hr>
+<div class="row">
+    <div class="col">
+        <p class="h4">Ad, Soyad: {{user.name}}</p>
+    </div><div class="col">
+    {% if 'view_panel' in permissions %}
+        {% if user.confirmed == '1' %}
+        <p class="h4 text-success">
+        {% else %}
+        <p class="h4 text-warning">
+        {% endif %}
+        Email: {{user.email}}</p>
+    
+    {% endif %}
+    </div>
+</div>
+<br>
+{% if articles %}
+<table class="table table-hover text-center">
+        <thead>
+          <tr>
+           <th>Məqalələri</th> 
+          </tr>
+        </thead>
+        <tbody>
+            {% for article in articles  %}
+            <tr>
+           <td> <i class="fas fa-eye"></i> {{article.readtime}}</span> <a href="/article/{{article.id}}"> {{article.title}} </a></td>
+          </tr>
+            {% endfor %}
+          
+        </tbody>
+   </table>
+
+
+{% endif %}
+{% endblock body %}

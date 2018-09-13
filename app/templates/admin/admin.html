@@ -1,0 +1,107 @@
+{% extends "includes/layout.html" %}
+
+{% block body %}
+<h3 class="display-4">
+        <i class="fas fa-user-tie"></i> Admin Panel
+</h3>
+
+<hr>
+{% if session.user.is_superuser %}
+<button class="btn btn-danger">SuperAdmin</button><br><br>
+<a class="btn btn-primary" href="/addpermission">İstifadəçiyə icazə ver</a>
+<hr> 
+{% endif %}
+<h3 class="mb-4">Son Məqalələr:</h3>
+<form action="/articles" method="get">
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="key" class="form-control" placeholder="Axtar" required>
+            
+          </div>
+          <div class="col">
+            <input type="submit" class="btn btn-success" value="Axtar">
+          </div>
+        </div>
+      </form>
+      <br>
+{% if articles %}
+<table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Başlıq</th>
+            <th scope="col">Tarix</th>
+            <th scope="col">Əməliyyat</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for article in articles  %}
+            <tr>
+            <th scope="row"> {{article.id}} </th>
+            <td><span class="mr-2"><i class="fas fa-eye"></i> {{article.readtime}}</span> <a href="/article/{{article.id}}"> {{article.title}} </a></td>
+            <td> {{article.created_at}} </td>
+            <td>
+              {% if 'edit_article' in permissions %}
+            <a href="/edit/{{article.id}}" class="btn btn-primary"><i class="fas fa-pen"></i> Dəyiş</a> 
+            {% endif %}
+             {% if 'delete_article' in permissions %}
+             <a href="/delete/{{article.id}}" class="btn btn-danger"><i class="fas fa-trash"></i> Sil</a> </td>
+             {% endif %}
+          </tr>
+            {% endfor %}
+          
+        </tbody>
+   </table>
+
+{% else %}
+<div class="alert alert-warning">
+  Məqalə yoxdur
+</div>
+{% endif %}
+<h3 class="mb-4">Son İstifadəçilər:</h3>
+{% if users %}
+<table class="table table-hover">
+  <caption> <a href="/admin/users"> Hamısına bax</a></caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">İstifadəçi adı</th>
+            <th scope="col">Email</th>
+            <th scope="col">Əməliyyat</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for user in users  %}
+            {% if user.confirmed =='1' %}
+            <tr>
+            {% else %}
+            <tr class="table-warning">
+            {% endif %}
+            
+            <th scope="row"> {{user.id}} </th>
+            <td><span class="mr-2"> {{user.username}}</td>
+            <td> {{user.email}} </td>
+            <td>
+                {% if 'edit_user' in permissions %}
+                <a href="/user/edit/{{user.id}}" class="btn btn-primary"><i class="fas fa-pen"></i> Dəyiş</a> 
+                {% endif %}
+                {% if 'delete_user' in permissions %}
+                <a href="/user/delete/{{user.id}}" class="btn btn-danger"><i class="fas fa-trash"></i> Sil</a> </td>
+                {% endif %}
+            </td>
+
+          </tr>
+            {% endfor %}
+          
+        </tbody>
+   </table>
+
+{% else %}
+<div class="alert alert-warning">
+  İstifadəçi yoxdur
+</div>
+{% endif %}
+
+
+{{permissions}}
+{% endblock body %}

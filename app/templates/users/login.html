@@ -1,0 +1,20 @@
+{% extends "includes/layout.html" %}
+{% block title %}
+Daxil ol
+{% endblock title %}
+
+
+{% block body %}
+{% from "includes/formhelper.html" import render_field %}
+<h1 class="display-3">Giriş</h1>
+<hr>
+<form method='post'>
+        {{ render_field(form.email,class = 'form-control') }}
+        {{ render_field(form.password,class = 'form-control') }}
+        
+        <input type="submit" class="btn btn-success" value="Daxil ol">
+
+
+
+</form>
+{% endblock body %}

@@ -1,0 +1,18 @@
+{% extends "includes/layout.html" %}
+
+{% block body %}
+{% if confirmed %}
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Sizin Hesabınız Təsdiqlənib!</h4>
+  </div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">Hesabınız Təsdiq olunmayıb!</h4>
+    <p>Saytın bütün imkanlarından istifadə etmək üçün emailinizi təsdiqləyin!</p>
+    <hr>
+    <p class="mb-0">Əgər sizə təsdiq mesajı gəlməyibsə Yenidən
+        <a href="/resend" class="alert-link">göndər</a></p>
+  </div>
+{% endif %}
+
+{% endblock body %}

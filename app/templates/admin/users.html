@@ -1,0 +1,66 @@
+{% extends "includes/layout.html" %}
+
+{% block body %}
+<h3 class="display-4">
+        <i class="fas fa-users"></i> İstifadəçilər
+</h3>
+<br>
+
+<form method="get">
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="key" class="form-control" placeholder="istifadəçi adı və ya email" required>
+          </div>
+          <div class="col">
+            <input type="submit" class="btn btn-success" value="Axtar">
+          </div>
+        </div>
+      </form>
+      <br>
+      {% if key %}
+  <p class="text-muted">'<span>{{key}}</span>' sözünə görə axtarış...<a class="text-danger" href="/admin/users"><i class="fas fa-times"></i></a></p>
+  {% endif %}
+   
+{% if users %}
+<table class="table table-hover">
+
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">İstifadəçi adı</th>
+            <th scope="col">Email</th>
+            <th scope="col">Əməliyyat</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for user in users  %}
+            {% if user.confirmed =='1' %}
+            <tr>
+            {% else %}
+            <tr class="table-warning">
+            {% endif %}
+            
+            <th scope="row"> {{user.id}} </th>
+            <td><span class="mr-2"> {{user.username}}</td>
+            <td> {{user.email}} </td>
+            <td>
+                {% if 'edit_user' in permissions %}
+                <a href="/user/edit/{{user.id}}" class="btn btn-primary"><i class="fas fa-pen"></i> Dəyiş</a> 
+                {% endif %}
+                {% if 'delete_user' in permissions %}
+                <a href="/user/delete/{{user.id}}" class="btn btn-danger"><i class="fas fa-trash"></i> Sil</a> </td>
+                {% endif %}
+            </td>
+
+          </tr>
+            {% endfor %}
+          
+        </tbody>
+   </table>
+
+{% else %}
+<div class="alert alert-warning">
+  İstifadəçi yoxdur
+</div>
+{% endif %}
+{% endblock body %}

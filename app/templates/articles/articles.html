@@ -1,0 +1,58 @@
+{% extends "includes/layout.html" %}
+{% block kod %}
+<link rel="stylesheet" href="/static/jquery-ui/jquery-ui.css">
+
+{% endblock kod %}
+
+{% block body %}
+<h3 class="display-4"><i class="fas fa-th-list"></i> Məqalələr</h3>
+<hr>
+
+<form method="get">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" id="search" name="key" class="form-control" placeholder="Axtar" required>
+      </div>
+      <div class="col">
+        <input type="submit" class="btn btn-success" value="Axtar">
+      </div>
+    </div>
+  </form>
+  {% if key %}
+  <p class="text-muted">'<span>{{key}}</span>' sözünə görə axtarış...</p>
+  {% endif %}
+  <hr>
+
+{% if articles %}
+<div class="list-group">
+{% for article in articles %}
+<a href= "/article/{{article.id}}" class="list-group-item"><h4>{{article.title}} 
+    <small class="text-muted">{{article.created_at}}</small></h4></a>
+{% endfor %}
+</div>
+{% else %}
+<div class="alert alert-warning">
+    Məqalə yazılmayıb
+</div>
+
+
+{% endif %}
+
+{% endblock body %}
+
+{% block kod2 %}
+<script>
+  $(document).ready(function(){
+    
+    $( "#search" ).autocomplete({
+      source: '/search',
+      select: function(event,ui){
+        window.location.href = '/article/' + ui.item.id
+      },
+      minLength: 2
+    });
+  } );
+  </script>
+
+{% endblock kod2 %}
+
