@@ -37,12 +37,12 @@ def register():
             cursor.execute(query,(email,username,name,password,token))
             mysql.connection.commit()
             cursor.close()
-            confirm_url = url_for('confirm_email', token=token, _external = True)
+            confirm_url = url_for('users.confirm_email', token=token, _external = True)
             html = render_template('email.html', confirm_url=confirm_url)
             subject = 'Hesabınızı Təsdiqləyin'
             send_email(to = email,subject=subject,template= html)
             flash('Qeydiyyatdan uğurla keçdiniz!','success')
-            return redirect(url_for('login'))
+            return redirect(url_for('users.login'))
         elif error['username'] == True:
             flash('Belə istifadəçi adı var','danger')
         elif error['email'] == True:
@@ -92,7 +92,7 @@ def resend():
         cursor.execute('update users set confirmed =%s where id=%s',(token,id))
         mysql.connection.commit()
         cursor.close()
-        confirm_url = url_for('confirm_email', token=token, _external = True)
+        confirm_url = url_for('users.confirm_email', token=token, _external = True)
         html = render_template('email.html', confirm_url=confirm_url)
         subject = 'Hesabınızı Təsdiqləyin'
         send_email(to = email,subject=subject,template= html)

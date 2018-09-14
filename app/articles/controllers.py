@@ -17,7 +17,7 @@ def delete(id):
     result = cursor.execute(query,(id,))
     if result == 1:
         article = cursor.fetchone()
-        if article['author'] == session['user']['id'] or permisson('del_article'):
+        if article['author'] == session['user']['id'] or permisson('delete_article'):
             query = 'delete from articles where id = %s'
             cursor.execute(query,(id,))
             mysql.connection.commit()
@@ -32,7 +32,6 @@ def delete(id):
 @mod_articles.route('/search', methods=['GET','POST'])
 def search():
     key = request.args.get('term')
-    print(key)
     cursor = mysql.connect.cursor()
     query = "select * from articles where title like '%{key}%' ".format(key=key)
     result = cursor.execute(query)
@@ -43,7 +42,6 @@ def search():
     result = []
     for article in articles:
         result.append({'label':article['title'],'id':article['id']})
-    print(json.dumps(result))
     return json.dumps(result)
 
 
