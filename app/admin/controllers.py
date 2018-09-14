@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, make_response, render_template, redirect, url_for, session, flash, logging, request
 from app import app, mysql, mail
-from myfuncs import errors, mylogin, confirm_token, send_email, categories, get_username, get_permissions
+from myfuncs import get_username, get_permissions, change_permission
 from app.decorators import login_required, not_login, confirm_required, admin, has_permission
 from app.admin.forms import AddPermissonForm
 
@@ -25,31 +25,36 @@ def adminview():
 @admin
 def addpermission():
     cursor = mysql.connection.cursor()
-    cursor.execute('select id, name from permissions')
-    tuppermissions = cursor.fetchall()
-    permissions = []
-    for permission in tuppermissions:
-        permissions.append((permission['id'],permission['name']))
     form = AddPermissonForm(request.form)
-    form.permission.choices = permissions
     if request.method == 'POST' and form.validate():
-        email = form.user.data
-        permission = form.permission.data
-        result = cursor.execute('select id from users where email = %s',(email,))
-        if result == 1:
-            user = cursor.fetchone()
-            userid = user['id']
-            result = cursor.execute('select * from users_permissions where user_id = %s and permission_id = %s',(userid,permission))
-            if result == 0:
-                cursor.execute('insert into users_permissions(permission_id, user_id) VALUES(%s,%s)',(permission,userid))
-                mysql.connection.commit()
-                flash('İstifadəçiyə icazə verildi!','success')
-            else:
-                flash('bu istifadəçinin artıq buna icazəsi var','danger')
-        else:
-            flash('belə istifadəçi yoxdur','danger')
-        cursor.close()
+        codename = form.codename.data
+        name = form.name.data
+        form = AddPermissonForm()
+        cursor.execute('insert into permissions(codename, name) values(%s,%s)',(codename,name))
+        mysql.connection.commit()
     return render_template('admin/addpermission.html', form=form, permissions = get_permissions(session['user']['id']))
+@mod_admin.route('/user/edit/<int:id>')
+@login_required
+@admin
+def edituser(id):
+    cursor= mysql.connection.cursor()
+    result = cursor.execute('select * from users where id =%s',(id,))
+    permission = request.args.get('permission','')
+    
+    if result ==1:
+        if permission:
+            permission = int(permission)
+            message = change_permission(permission,id)
+            flash(message,'success')
+            return redirect(url_for('admin.edituser', id=id))
+        user= cursor.fetchone()
+        cursor.execute('select * from permissions')
+        permissions = cursor.fetchall()
+        userperms = get_permissions(user['id'])
+        return render_template('admin/edituser.html',permissions=get_permissions(session['user']['id']), user=user, basepermissions=permissions, userperms=userperms)
+    else:
+        return redirect(url_for('admin.adminview'))
+
 
 @mod_admin.route('/admin/users')
 @login_required

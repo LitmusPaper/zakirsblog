@@ -2,9 +2,10 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, SelectField
 
 
 class AddPermissonForm(Form):
-    user = StringField('istifadəçinin emaili:', validators=[
+    codename = StringField('codename:', validators=[
         validators.DataRequired(message='Mütləq yazılmalıdır')
     ])
-    permission = SelectField('Hansı icazə:', coerce=int, validators=[
+    name = StringField('name:', validators=[
         validators.DataRequired(message='mütləq seçilməlidir')
     ])
+ 

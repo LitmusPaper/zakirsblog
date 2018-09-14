@@ -2,13 +2,13 @@
 
 {% block body %}
 {% from "includes/formhelper.html" import render_field %}
-<h1 class="display-3">İcazə ver</h1>
+<h1 class="display-3">İcazə əlavə et</h1>
 <hr>
 <form method='post'>
-        {{ render_field(form.user,class = 'form-control') }}
-        {{ render_field(form.permission,class = 'form-control') }}
+        {{ render_field(form.codename,class = 'form-control') }}
+        {{ render_field(form.name,class = 'form-control') }}
         
-        <input type="submit" class="btn btn-success" value="İcazə ver">
+        <input type="submit" class="btn btn-success" value="Əlavə et">
 
 
 

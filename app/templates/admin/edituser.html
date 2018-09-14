@@ -1,0 +1,39 @@
+{% extends "includes/layout.html" %}
+{% block body %}
+<h3 class="display-4">
+    <i class="fas fa-user-astronaut"></i> {{user.username}}
+</h3>
+<hr>
+<h2>İcazələr:</h2>
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Adı</th>
+        <th scope="col">Əməliyyat</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for permission in basepermissions  %}
+        {% if permission.codename in userperms %}
+        <tr class="table-success">
+        {% else %}
+        <tr>
+        {% endif %}
+        
+            <th scope="row"> {{permission.id}} </th>
+            <td> {{permission.name}} </td>
+            {% if permission.codename in userperms %}
+            <td> <a href="?permission={{permission.id}}" class="btn btn-danger"><i class="fas fa-minus"></i> Sil</a>
+            
+            {% else %}
+            <td> <a href="?permission={{permission.id}}" class="btn btn-primary"><i class="fas fa-plus"></i> Əlavə et</a>
+           {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+</table>
+
+{% endblock body %}

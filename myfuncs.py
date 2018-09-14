@@ -4,6 +4,20 @@ from passlib.hash import sha256_crypt
 from flask_mail import Mail, Message
 from app import mysql, mail
 
+
+def change_permission(permission_id,user_id):
+    cursor = mysql.connection.cursor()
+    result = cursor.execute('select * from users_permissions where permission_id =%s and user_id = %s',(permission_id,user_id))
+    if result == 0:
+        query = 'insert into users_permissions(permission_id,user_id) values(%s,%s)'
+        message = 'İcazə verildi'
+    else:
+        query = 'delete from users_permissions where permission_id = %s and user_id = %s'
+        message = 'İcazə silindi'
+    cursor.execute(query,(permission_id,user_id))
+    mysql.connection.commit()
+    return message
+
 def get_permissions(id):
     cursor = mysql.connection.cursor()
     cursor.execute('\
