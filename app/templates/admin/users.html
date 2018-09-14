@@ -22,7 +22,7 @@
   {% endif %}
    
 {% if users %}
-<table class="table table-hover">
+<table class="table table-hover table-responsive-sm">
 
         <thead>
           <tr>
@@ -41,8 +41,8 @@
             {% endif %}
             
             <th scope="row"> {{user.id}} </th>
-            <td><span class="mr-2"> {{user.username}}</td>
-            <td> {{user.email}} </td>
+            <td><span> {{user.username}}</span></td>
+            <td><span>{{user.email}}</span>  </td>
             <td>
                 {% if 'edit_user' in permissions %}
                 <a href="/user/edit/{{user.id}}" class="btn btn-primary"><i class="fas fa-pen"></i> Dəyiş</a> 
