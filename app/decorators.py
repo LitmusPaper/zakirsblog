@@ -38,7 +38,7 @@ def login_required(f):
             
         else:
             flash('Daxil olmalısız','warning')
-            return redirect(url_for('login', next=request.url))
+            return redirect(url_for('users.login', next=request.url))
         
     return decorated_function
 
@@ -52,7 +52,7 @@ def confirm_required(f):
         if user['confirmed'] == '1':
             return f(*args, **kwargs)
         else:
-            return redirect(url_for('activate'))
+            return redirect(url_for('users.activate'))
         
     return decorated_function
 
@@ -63,8 +63,6 @@ def not_login(f):
             return redirect(url_for('index'))
         else:
             return f(*args, **kwargs)
-        
-        
     return decorated_function
 
 def admin(f):

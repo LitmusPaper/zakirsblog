@@ -38,7 +38,7 @@ def register():
             mysql.connection.commit()
             cursor.close()
             confirm_url = url_for('users.confirm_email', token=token, _external = True)
-            html = render_template('email.html', confirm_url=confirm_url)
+            html = render_template('users/email.html', confirm_url=confirm_url)
             subject = 'Hesabınızı Təsdiqləyin'
             send_email(to = email,subject=subject,template= html)
             flash('Qeydiyyatdan uğurla keçdiniz!','success')
